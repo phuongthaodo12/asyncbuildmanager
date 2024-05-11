@@ -1,16 +1,25 @@
-function numDecodings(s) {
-  const dp = new Array(s.length + 1).fill(0);
-  dp[0] = 1;
-  dp[1] = s[0] === "0" ? 0 : 1;
-  for (let i = 2; i <= s.length; i++) {
-    const oneDigit = parseInt(s.substring(i - 1, i));
-    const twoDigits = parseInt(s.substring(i - 2, i));
-    if (oneDigit >= 1) {
-      dp[i] += dp[i - 1];
-    }
-    if (twoDigits >= 10 && twoDigits <= 26) {
-      dp[i] += dp[i - 2];
+function ladderLength(beginWord, endWord, wordList) {
+  const wordSet = new Set(wordList);
+  if (!wordSet.has(endWord)) return 0;
+  let count = 0;
+  const queue = [beginWord];
+  while (queue.length) {
+    const size = queue.length;
+    count++;
+    for (let i = 0; i < size; i++) {
+      const current = queue.shift();
+      if (current === endWord) return count;
+      for (let j = 0; j < current.length; j++) {
+        for (let k = 97; k <= 122; k++) {
+          const newWord =
+            current.slice(0, j) + String.fromCharCode(k) + current.slice(j + 1);
+          if (wordSet.has(newWord)) {
+            queue.push(newWord);
+            wordSet.delete(newWord);
+          }
+        }
+      }
     }
   }
-  return dp[s.length];
+  return 0;
 }
