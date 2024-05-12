@@ -1,25 +1,20 @@
-function ladderLength(beginWord, endWord, wordList) {
-  const wordSet = new Set(wordList);
-  if (!wordSet.has(endWord)) return 0;
+function findCircleNum(M) {
+  if (!M || M.length === 0) return 0;
+  const visited = new Array(M.length).fill(false);
   let count = 0;
-  const queue = [beginWord];
-  while (queue.length) {
-    const size = queue.length;
-    count++;
-    for (let i = 0; i < size; i++) {
-      const current = queue.shift();
-      if (current === endWord) return count;
-      for (let j = 0; j < current.length; j++) {
-        for (let k = 97; k <= 122; k++) {
-          const newWord =
-            current.slice(0, j) + String.fromCharCode(k) + current.slice(j + 1);
-          if (wordSet.has(newWord)) {
-            queue.push(newWord);
-            wordSet.delete(newWord);
-          }
-        }
-      }
+  for (let i = 0; i < M.length; i++) {
+    if (!visited[i]) {
+      dfs(M, i, visited);
+      count++;
     }
   }
-  return 0;
+  return count;
+}
+function dfs(M, i, visited) {
+  visited[i] = true;
+  for (let j = 0; j < M.length; j++) {
+    if (M[i][j] === 1 && !visited[j]) {
+      dfs(M, j, visited);
+    }
+  }
 }
