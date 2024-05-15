@@ -1,26 +1,18 @@
-function letterCombinations(digits) {
-  if (digits.length === 0) return [];
-  const map = {
-    2: "abc",
-    3: "def",
-    4: "ghi",
-    5: "jkl",
-    6: "mno",
-    7: "pqrs",
-    8: "tuv",
-    9: "wxyz",
-  };
-  const result = [];
-  backtrack("", digits);
-  return result;
-  function backtrack(combination, nextDigits) {
-    if (nextDigits.length === 0) result.push(combination);
-    else {
-      const digit = nextDigits.substring(0, 1);
-      const letters = map[digit];
-      for (const letter of letters) {
-        backtrack(combination + letter, nextDigits.substring(1));
-      }
+function minPathSum(grid) {
+  const m = grid.length;
+  const n = grid[0].length;
+  const dp = new Array(m).fill(0).map(() => new Array(n).fill(0));
+  dp[0][0] = grid[0][0];
+  for (let i = 1; i < m; i++) {
+    dp[i][0] = dp[i - 1][0] + grid[i][0];
+  }
+  for (let j = 1; j < n; j++) {
+    dp[0][j] = dp[0][j - 1] + grid[0][j];
+  }
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = grid[i][j] + Math.min(dp[i - 1][j], dp[i][j - 1]);
     }
   }
+  return dp[m - 1][n - 1];
 }
